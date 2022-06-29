@@ -1,19 +1,10 @@
 import socket
 from time import sleep
-import random
+from random import choice
 from threading import Thread
 from datetime import datetime
 from colorama import init, Fore
-
-print('''
-      d8b   d8,                                              d8b 
-      88P  `8P                                               88P 
-     d88                                                    d88  
- d888888    88b  88bd88b d8888b d8888b d8888b   88bd88b d888888  
-d8P' ?88    88P  88P'  `d8P' `Pd8P' `Pd8P' ?88  88P'  `d8P' ?88  
-88b  ,88b  d88  d88     88b    88b    88b  d88 d88     88b  ,88b 
-`?88P'`88bd88' d88'     `?888P'`?888P'`?8888P'd88'     `?88P'`88b - client.
-''')
+import os
 
 # init colors
 init()
@@ -26,13 +17,26 @@ colors = [Fore.BLUE, Fore.CYAN, Fore.GREEN, Fore.LIGHTBLACK_EX,
 ]
 
 # choose a random color for the client
-client_color = random.choice(colors)
+client_color = choice(colors)
+
+print(client_color + '''
+      d8b   d8,                                              d8b 
+      88P  `8P                                               88P 
+     d88                                                    d88  
+ d888888    88b  88bd88b d8888b d8888b d8888b   88bd88b d888888  
+d8P' ?88    88P  88P'  `d8P' `Pd8P' `Pd8P' ?88  88P'  `d8P' ?88  
+88b  ,88b  d88  d88     88b    88b    88b  d88 d88     88b  ,88b 
+`?88P'`88bd88' d88'     `?888P'`?888P'`?8888P'd88'     `?88P'`88b - client.
+''' + f"{Fore.RESET}")
+
+sleep(1)
+os.system('cls' if os.name == 'nt' else 'clear')
 
 # server's IP address
 # if the server is not on this machine, 
 # put the private (network) IP address (e.g 192.168.1.2)
-SERVER_HOST = input("Host/IP: ")
-SERVER_PORT = int(input("Port: ")) # server's port
+SERVER_HOST = "localhost"
+SERVER_PORT = 5002 # server's port
 separator_token = "<SEP>" # we will use this to separate the client name & message
 
 # initialize TCP socket
@@ -60,8 +64,14 @@ t.start()
 
 while True:
     # input message we want to send to the server
-    to_send =  input()
-    
+    sleep(0.2)
+    #print(f"{name} > ", end='')
+    to_send = input(f"{name} > ")
+
+    # a way to exit the program
+    if to_send.lower() == '':
+        continue
+
     # a way to exit the program
     if to_send.lower() == 'q':
         s.send(f"{name} has left the chat.".encode())
@@ -74,6 +84,6 @@ while True:
     # finally, send the message
     s.send(to_send.encode())
 
-# close the socket
+# exiting the program
 print("Exiting...")
-s.close()
+exit()
