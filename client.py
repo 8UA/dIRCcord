@@ -3,8 +3,9 @@ from time import sleep
 from random import choice
 from threading import Thread
 from datetime import datetime
-from colorama import init, Fore
+from colorama import init, Fore, Back
 import os
+import sys
 
 # init colors
 init()
@@ -35,8 +36,12 @@ os.system('cls' if os.name == 'nt' else 'clear')
 # server's IP address
 # if the server is not on this machine, 
 # put the private (network) IP address (e.g 192.168.1.2)
-SERVER_HOST = "localhost"
+print("Leave empty to assign default values. (localhost:5002)")
+SERVER_HOST = input("Host/IP: ")
 SERVER_PORT = 5002 # server's port
+if SERVER_HOST == '':
+    SERVER_HOST = "localhost"
+
 separator_token = "<SEP>" # we will use this to separate the client name & message
 
 # initialize TCP socket
@@ -65,15 +70,24 @@ t.start()
 while True:
     # input message we want to send to the server
     sleep(0.2)
-    #print(f"{name} > ", end='')
+    # print(f"{name} > ", end='')
     to_send = input(f"{name} > ")
 
-    # a way to exit the program
+    # commands & features #
+
+    # laugh
+    if to_send.lower() == f'/lean':
+        print(Back.MAGENTA)
+        os.system('cls' if os.name == 'nt' else 'clear')
+        continue
+
+    # if the message is empty clear last output line and move console cursor up
     if to_send.lower() == '':
+        sys.stdout.write("\x1b[1A\x1b[2K")
         continue
 
     # a way to exit the program
-    if to_send.lower() == 'q':
+    if to_send.lower() == '/exit':
         s.send(f"{name} has left the chat.".encode())
         sleep(1)
         break
