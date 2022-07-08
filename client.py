@@ -52,7 +52,7 @@ print("[+] Connected.")
 name = input("Enter your name: ")
 
 s.send(f"{name} has joined the chat.".encode())
-print('[TIP] you can close the client by sending "q" \n')
+print('[TIP] you can close the client by sending "/exit" \n')
 
 def listen_for_messages():
     while True:
