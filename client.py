@@ -20,6 +20,7 @@ colors = [Fore.BLUE, Fore.CYAN, Fore.GREEN, Fore.LIGHTBLACK_EX,
 # choose a random color for the client
 client_color = choice(colors)
 
+os.system('cls' if os.name == 'nt' else 'clear')
 print(client_color + '''
       d8b   d8,                                              d8b 
       88P  `8P                                               88P 
@@ -29,19 +30,16 @@ d8P' ?88    88P  88P'  `d8P' `Pd8P' `Pd8P' ?88  88P'  `d8P' ?88
 88b  ,88b  d88  d88     88b    88b    88b  d88 d88     88b  ,88b 
 `?88P'`88bd88' d88'     `?888P'`?888P'`?8888P'd88'     `?88P'`88b - client.
 ''' + f"{Fore.RESET}")
-
 sleep(1)
-os.system('cls' if os.name == 'nt' else 'clear')
 
 # server's IP address
 # if the server is not on this machine, 
 # put the private (network) IP address (e.g 192.168.1.2)
 print("Leave empty to assign default values. (localhost:5002)")
 SERVER_HOST = input("Host/IP: ")
-SERVER_PORT = 5002 # server's port
 if SERVER_HOST == '':
     SERVER_HOST = "localhost"
-
+SERVER_PORT = int(input("Port: ")) # server's port
 separator_token = "<SEP>" # we will use this to separate the client name & message
 
 # initialize TCP socket
@@ -53,6 +51,7 @@ print("[+] Connected.")
 # prompt the client for a name
 name = input("Enter your name: ")
 
+s.send(f"{name} has joined the chat.".encode())
 print('[TIP] you can close the client by sending "q" \n')
 
 def listen_for_messages():
@@ -78,7 +77,7 @@ while True:
     # laugh
     if to_send.lower() == f'/lean':
         print(Back.MAGENTA)
-        os.system('cls' if os.name == 'nt' else 'clear')
+        sys.stdout.write("\x1b[1A\x1b[2K")
         continue
 
     # if the message is empty clear last output line and move console cursor up
